@@ -23,12 +23,15 @@ class Reg(StatesGroup):
     context = State()
 
 
+# Command handlers
+
+
 @router.message(CommandStart())
 async def send_welcome(message: Message) -> None:
     await message.answer("Hello there! 😊", reply_markup=kb.start)
 
 
-@router.message(Command('find'))
+@router.message(Command("find"))
 async def send_help(message: Message) -> None:
     await message.answer("Choose type of message:", reply_markup=kb.message_type)
 
@@ -61,9 +64,7 @@ async def register_context(message: Message, state: FSMContext) -> None:
     # find message with this id and send it to user
 
     await bs.bot.send_message(
-        chat_id=message.chat.id,
-        text="Abra kadabra",
-        reply_to_message_id=message_id
+        chat_id=message.chat.id, text="Abra kadabra", reply_to_message_id=message_id
     )
 
     # for msg in messages:
@@ -107,9 +108,7 @@ async def register_context(message: Message, state: FSMContext) -> None:
 async def echo(message: Message) -> None:
     try:
         db.save_message(
-            message_id=message.message_id,
-            text=message.text,
-            chat_id=message.chat.id
+            message_id=message.message_id, text=message.text, chat_id=message.chat.id
         )
     except TypeError:
         await message.answer("Nice try")
@@ -119,16 +118,17 @@ async def echo(message: Message) -> None:
 
 @router.callback_query(F.data == "about")
 async def send_about(callback: CallbackQuery) -> None:
-    await callback.message.answer("It is a bot based on Gema 3 4B model,"
-                                  "you can find context of any type of message in this chat."
-                                  "To use it, write /find and choose type of message.")
+    await callback.message.answer(
+        "It is a bot based on Gema 3 4B model,"
+        "you can find context of any type of message in this chat."
+        "To use it, write /find and choose type of message."
+    )
 
 
 # In development
+
 
 @router.message(F.photo)
 async def send_photo(message: Message) -> None:
     await message.answer(f"Photo {message.photo[-1].file_id}")
     await message.answer("Image recognition in development!")
-
-#test

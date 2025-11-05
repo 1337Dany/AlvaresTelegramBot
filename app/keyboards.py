@@ -1,6 +1,5 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
-#it is a reply keyboard with one button for canceling operation of context search
 main = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Cancel")],
 ],
