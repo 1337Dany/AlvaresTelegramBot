@@ -29,6 +29,7 @@ class Reg(StatesGroup):
 @router.message(CommandStart())
 async def send_welcome(message: Message) -> None:
     await message.answer("Hello there! 😊", reply_markup=kb.start)
+    message.conf["stop_propagation"] = True
 
 
 @router.message(Command("find"))
@@ -44,6 +45,7 @@ async def send_text(callback: CallbackQuery, state: FSMContext) -> None:
 
 @router.message(Reg.context)
 async def register_context(message: Message, state: FSMContext) -> None:
+    await state.set_state(Reg.context)
     if message.text.lower() == "cancel":
         await message.answer("Cancelled", reply_markup=ReplyKeyboardRemove())
         await state.clear()
